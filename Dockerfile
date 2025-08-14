@@ -1,7 +1,7 @@
-# Base image (Python 3.9 + Debian Bullseye)
+# Python 3.9 + Debian Bullseye base image
 FROM python:3.9-bullseye
 
-# Install system dependencies (FFmpeg + development headers)
+# Install system dependencies (FFmpeg + development headers + distutils)
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y \
         ffmpeg \
@@ -16,19 +16,19 @@ RUN apt-get update && apt-get upgrade -y && \
         libswresample-dev \
         python3.9-distutils \
     && rm -rf /var/lib/apt/lists/*
-    
-# Upgrade pip/setuptools/wheel
+
+# Upgrade pip, setuptools, wheel
 RUN python3.9 -m pip install --upgrade pip setuptools wheel
 
-# Uninstall incompatible numpy & install a compatible one
+# Fix NumPy ABI mismatch by installing compatible version
 RUN python3.9 -m pip uninstall -y numpy && \
     python3.9 -m pip install numpy==1.21.6
 
-# Copy all project files into container
+# Copy project files into container
 COPY . .
 
-# Install Python requirements (no cache for fresh build)
+# Install Python dependencies
 RUN python3.9 -m pip install --no-cache-dir -U -r requirements.txt
 
-# Start the bot
+# Command to start the bot
 CMD ["python3.9", "main.py"]
