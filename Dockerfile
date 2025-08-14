@@ -1,17 +1,29 @@
-#Python based docker image
+# Python based docker image
 FROM python:3.9-bullseye
 
-RUN apt-get update && apt-get upgrade -y
+# Install dependencies in one layer
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y \
+        ffmpeg \
+        opus-tools \
+        pkg-config \
+        libavformat-dev \
+        libavcodec-dev \
+        libavdevice-dev \
+        libavutil-dev \
+        libavfilter-dev \
+        libswscale-dev \
+        libswresample-dev \
+        && rm -rf /var/lib/apt/lists/*
 
-#Installing Requirements
-RUN apt-get install -y ffmpeg python3-pip opus-tools
+# Upgrade pip
+RUN python3.9 -m pip install --upgrade pip
 
-#Updating pip
-RUN python3.9 -m pip install -U pip
-
+# Copy all project files
 COPY . .
 
-RUN python3.9 -m pip install -U -r requirements.txt
+# Install Python requirements
+RUN python3.9 -m pip install --no-cache-dir -U -r requirements.txt
 
-#Running VCBot
-CMD ["python3.9","main.py"]
+# Run VC Bot
+CMD ["python3.9", "main.py"]
