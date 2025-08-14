@@ -14,7 +14,9 @@ RUN apt-get update && apt-get upgrade -y && \
         libavfilter-dev \
         libswscale-dev \
         libswresample-dev \
+        python3.9-distutils \
     && rm -rf /var/lib/apt/lists/*
+    
 
 # Upgrade pip/setuptools/wheel
 RUN python3.9 -m pip install --upgrade pip setuptools wheel
