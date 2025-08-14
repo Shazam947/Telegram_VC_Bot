@@ -1,5 +1,5 @@
 #Python based docker image
-FROM python:3.9.5-bullseye
+FROM python:3.9-bullseye
 
 RUN apt-get update && apt-get upgrade -y
 
