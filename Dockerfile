@@ -1,3 +1,5 @@
+python3.9 -m pip install --upgrade pip setuptools wheel
+
 # Python based docker image
 FROM python:3.9-bullseye
 
